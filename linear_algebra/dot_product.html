@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dot Product</title>
+
+    <link rel="icon"
+        href="https://raw.githubusercontent.com/secondvoca/secondvoca.github.io/refs/heads/main/favicon.ico"
+        type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <p>
+        2차원의 공간을 생각하자. 원점을 지나는 직선이 있다.
+        이 직선은 길이가 1인 벡터 \( \hat{u} \)으로 표시될 수 있다.
+    </p>
+    <canvas id="myCanvas" width="500" height="500"></canvas>
+
+    <script>
+        const canvas = document.getElementById("myCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // 축 그리기
+        function drawAxes() {
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // x축
+            ctx.beginPath();
+            ctx.moveTo(0, height / 2);
+            ctx.lineTo(width, height / 2);
+            ctx.stroke();
+
+            // y축
+            ctx.beginPath();
+            ctx.moveTo(width / 2, 0);
+            ctx.lineTo(width / 2, height);
+            ctx.stroke();
+
+            // 화살표 그리기 (x축)
+            ctx.beginPath();
+            ctx.moveTo(width, height / 2);
+            ctx.lineTo(width - 10, height / 2 - 5);
+            ctx.lineTo(width - 10, height / 2 + 5);
+            ctx.fill();
+
+            // 화살표 그리기 (y축)
+            ctx.beginPath();
+            ctx.moveTo(width / 2, 0);
+            ctx.lineTo(width / 2 - 5, 10);
+            ctx.lineTo(width / 2 + 5, 10);
+            ctx.fill();
+        }
+
+        // 눈금 그리기
+        function drawTicks() {
+            const width = canvas.width;
+            const height = canvas.height;
+            const tickSpacing = 20; // 눈금 간격
+
+            // x축 눈금
+            for (let i = -width / 2; i <= width / 2; i += tickSpacing) {
+                if (i !== 0) { // 원점 제외
+                    ctx.beginPath();
+                    ctx.moveTo(width / 2 + i, height / 2 - 5);
+                    ctx.lineTo(width / 2 + i, height / 2 + 5);
+                    ctx.stroke();
+                }
+            }
+
+            // y축 눈금
+            for (let i = -height / 2; i <= height / 2; i += tickSpacing) {
+                if (i !== 0) { // 원점 제외
+                    ctx.beginPath();
+                    ctx.moveTo(width / 2 - 5, height / 2 + i);
+                    ctx.lineTo(width / 2 + 5, height / 2 + i);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        drawAxes();
+        drawTicks();
+
+    </script>
+    <p>이것은 두 번째 문단입니다. 각 문단은 별도의 <code>&lt;p&gt;</code> 태그로 구분됩니다.</p>
+    <p>이것은 세 번째 문단입니다. 문단을 나누면 가독성이 좋아집니다.</p>
+    <canvas id="quadraticCanvas" width="600" height="400" style="border:1px solid #000000;"></canvas>
+    <script>
+        window.onload = function () {
+            const canvas = document.getElementById('quadraticCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // Define the quadratic function: y = ax^2 + bx + c
+            const a = 1, b = -2, c = 1;
+
+            // Function to calculate y for a given x
+            function quadratic(x) {
+                return a * x * x + b * x + c;
+            }
+
+            // Draw the axes
+            function drawAxes() {
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height / 2);
+                ctx.lineTo(canvas.width, canvas.height / 2);
+                ctx.moveTo(canvas.width / 2, 0);
+                ctx.lineTo(canvas.width / 2, canvas.height);
+                ctx.strokeStyle = '#000';
+                ctx.stroke();
+            }
+
+            // Draw the quadratic graph
+            function drawQuadratic() {
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height / 2 - quadratic(-canvas.width / 2) * 20);
+
+                for (let x = -canvas.width / 2; x <= canvas.width / 2; x += 0.1) {
+                    const y = quadratic(x);
+                    ctx.lineTo(canvas.width / 2 + x * 20, canvas.height / 2 - y * 20);
+                }
+
+                ctx.strokeStyle = '#FF0000';
+                ctx.stroke();
+            }
+
+            drawAxes();
+            drawQuadratic();
+        };
+
+    </script>
+</body>
+
+</html>
