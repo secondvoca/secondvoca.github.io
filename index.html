@@ -1,38 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Awesome Website</title>
+    <title>SONG DONGCHAN BLOG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="https://raw.githubusercontent.com/secondvoca/secondvoca.github.io/refs/heads/main/favicon.ico" type="image/x-icon">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
+        header { background: #4a90e2; color: white; padding: 2rem 1rem; text-align: center; }
+        main { max-width: 700px; margin: 2rem auto; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 2rem; }
+        .accordion { margin-bottom: 1.5rem; border-bottom: 1px solid #eee; }
+        .accordion summary { font-size: 1.2rem; font-weight: bold; cursor: pointer; padding: 0.5rem 0; }
+        .accordion ul { margin: 0.5rem 0 1rem 1.5rem; padding: 0; }
+        .accordion li { margin-bottom: 0.5rem; }
+        .add-page-btn { background: #4a90e2; color: white; border: none; border-radius: 4px; padding: 0.3rem 0.7rem; cursor: pointer; font-size: 0.95rem; }
+        .add-page-btn:hover { background: #357abd; }
+    </style>
 </head>
-<html>
-	<body>
-		Hello! This is the first page!
-        <a href="likelihood_20250310.html">Go to LIKELIHOOD Page</a>
-        <a href="linear_algebra/dot_product.html">Go to dot product Page</a><p></p>
-        <p>
-            information theory:
-            <a href="/information_theory/entropy.html">Entropy</a>
-        </p>
-        <p>
-            clustering algorithms:
-            <a href="/unsupervised_learning/clustering/kmeans.html">K-means</a>
-        </p>
-        <p>
-            generative models:
-            <a href="/generative_model/variational_autoencoder.html">Variational Autoencoder</a>
-        </p>
-        <p>
-            deep learning:<br>
-            <a href="deep_learning/attention_is_all_you_need.html">Attention is All You Need</a><br>
-        </p>
-        <p>
-            Books:<br>
-            <a href="books/grokking_deep_reinforcement_learning.html">Grokking Deep Reinforcement Learning</a><br>
-            <a href="books/a_brief_history_of_intelligence.html">A Brief History of Intelligence</a>
-        </p>
-
-        
-	</body>
+<body>
+    <header>
+        <h1>SONG DONGCHAN BLOG</h1>
+    </header>
+    <main>
+        <details class="accordion" open>
+            <summary>machine learning</summary>
+            <ul id="research-list">
+                <li><a href="/machine_learning/deterministic_vs_probabilistic_modeling.html">deterministic vs probabilistic modeling</a></li>
+                <li><a href="#">예시 연구 페이지 2</a></li>
+            </ul>
+        </details>
+        <details class="accordion">
+            <summary>book review</summary>
+            <ul id="book-list">
+                <li><a href="books/a_brief_history_of_intelligence.html">a brief history of intelligence</a></li>
+                <li><a href="books/a_brief_history_of_time.html">a brief history of time</a></li>
+            </ul>
+        </details>
+        <details class="accordion">
+            <summary>etc</summary>
+            <ul id="etc-list">
+                <li><a href="#">todo</a></li>
+            </ul>
+        </details>
+    </main>
+</body>
 </html>
