@@ -7536,7 +7536,7 @@ $$=\int (\log \frac{p(x,z)q_\phi(z|x)}{p(z|x)q_\phi(z|x)})q_\phi(z|x)dz$$
 $$=\int (\log \frac{p(x,z)}{q_\phi(z|x)})q_\phi(z|x)+(\log \frac{q_\phi(z|x)}{p(z|x)})q_\phi(z|x)dz$$
 $$=\int (\log \frac{p(x,z)}{q_\phi(z|x)})q_\phi(z|x)dz+KL(q_\phi(z|x)||p(z|x))$$
 이 때,
-$$KL(q_\phi(z|x)||p(z|x))\geq1$$
+$$KL(q_\phi(z|x)||p(z|x))\geq0$$
 이므로
 $$\log p(x)\geq\int (\log \frac{p(x,z)}{q_\phi(z|x)})q_\phi(z|x)dz=ELBO$$
 ELBO 최대화 문제를 정리하면,
