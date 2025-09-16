@@ -7656,7 +7656,7 @@ $$
 \begin{align}
 H(p, q) &amp;= \mathbb{E}_p[\log\frac{1}{q(x)}] \\
      &amp;= \sum_xp(x)\log\frac{1}{q(x)} \\
-     &amp;= \sum_xp(x)\log\frac{\red{p(x)}}{q(x)}\frac{1}{\red{p(x)}} \\
+     &amp;= \sum_xp(x)\log\frac{p(x)}{q(x)}\frac{1}{p(x)} \\
      &amp;= \sum_xp(x)\left(\log\frac{p(x)}{q(x)}+\log\frac{1}{p(x)}\right) \\
      &amp;= D_{KL}(p(x)||q(x)) + H(p) \\
 D_{KL}(p(x)||q(x)) &amp;= \mathbb{E}_p[\log\frac{p(x)}{q(x)}] \\
