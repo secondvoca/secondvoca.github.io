@@ -7516,7 +7516,10 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Surprise">Surprise<a class="anchor-link" href="#Surprise">¶</a></h1>$$U(x)=\log\frac{1}{P(x)}$$
+<h1 id="Surprise">Surprise<a class="anchor-link" href="#Surprise">¶</a></h1><ul>
+<li>Self-information</li>
+</ul>
+$$I(x)=\log\frac{1}{p(x)}$$
 </div>
 </div>
 </div>
@@ -7580,8 +7583,15 @@ surprise:
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h1 id="Entropy">Entropy<a class="anchor-link" href="#Entropy">¶</a></h1><ul>
 <li>Expected surprise</li>
+<li>Average self-information</li>
+<li>Uncertainty, disorderliness</li>
 </ul>
-$$S(x) = \sum_xU(x)P(x)$$$$= \sum_x\log(\frac{1}{p(x)})p(x)$$
+$$
+\begin{align}
+H(x) &amp;= \mathbb{E}[I(x)] \\
+     &amp;= \sum_xp(x)\log\frac{1}{p(x)} \\
+\end{align}
+$$
 </div>
 </div>
 </div>
@@ -7611,6 +7621,47 @@ $$S(x) = \sum_xU(x)P(x)$$$$= \sum_x\log(\frac{1}{p(x)})p(x)$$
  [0.5917 0.4395 1.    ]
 </pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=20c9a65a">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="Cross-Entropy">Cross Entropy<a class="anchor-link" href="#Cross-Entropy">¶</a></h1><ul>
+<li>Difference between two probability distributions</li>
+</ul>
+$$
+\begin{align}
+H(p, q) &amp;= \mathbb{E}_p[\log\frac{1}{q(x)}] \\
+     &amp;= \sum_xp(x)\log\frac{1}{q(x)} \\
+\end{align}
+$$<ul>
+<li>If p and q are the same distribution</li>
+</ul>
+$$
+\begin{align}
+H(p, p) &amp;= \mathbb{E}_p[\log\frac{1}{p(x)}] \\
+     &amp;= \sum_xp(x)\log\frac{1}{p(x)} \\
+     &amp;= H(p) \\
+\end{align}
+$$<ul>
+<li>With the concept of Kullback-Liebler divergence,</li>
+<li>The cross-entropy is the sum of the entropy and KL-divergence</li>
+</ul>
+$$
+\begin{align}
+H(p, q) &amp;= \mathbb{E}_p[\log\frac{1}{q(x)}] \\
+     &amp;= \sum_xp(x)\log\frac{1}{q(x)} \\
+     &amp;= \sum_xp(x)\log\frac{\red{p(x)}}{q(x)}\frac{1}{\red{p(x)}} \\
+     &amp;= \sum_xp(x)\left(\log\frac{p(x)}{q(x)}+\log\frac{1}{p(x)}\right) \\
+     &amp;= D_{KL}(p(x)||q(x)) + H(p) \\
+D_{KL}(p(x)||q(x)) &amp;= \mathbb{E}_p[\log\frac{p(x)}{q(x)}] \\
+\end{align}
+$$
 </div>
 </div>
 </div>
