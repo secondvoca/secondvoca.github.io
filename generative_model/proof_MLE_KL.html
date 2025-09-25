@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Proof of relation between MLE and KL divergence</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            background: #f6f7f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 32px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 24px;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        .book-info {
+            font-size: 1rem;
+            color: #6c757d;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .review {
+            line-height: 1.7;
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 700px) {
+            .container {
+                margin: 16px;
+                padding: 16px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .review {
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({            
+            tex2jax: {inlineMath: [['$$','$$'], ['$','$'], ['\\(','\\)']]}            
+        });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Proof of relation between MLE and KL divergence</h1>
+        <div class="review">
+            <h2>The definition of Kullback-Leibler divergence (forward case)</h2>
+            <p>Let $p$ and $q_\theta$ be two probability distributions over the same variable $x$. $p(x)$ denotes the distribution of data, and $q_\theta(x)$ denotes the distribution of the model. The Kullback-Leibler divergence is defined as:</p>
+            $$D_{KL}(p || q_\theta) = \sum_{x} p(x) \log \frac{p(x)}{q_\theta(x)}$$
+            <p>for discrete variables, or</p>
+            $$D_{KL}(p || q_\theta) = \int p(x) \log \frac{p(x)}{q_\theta(x)} dx$$
+            <p>for continuous variables. This measures how much information is lost when $q_\theta$ is used to approximate $p$.</p>
+        </div>
+</body>
+</html>
