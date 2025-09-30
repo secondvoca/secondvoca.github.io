@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Variational Autoencoder</title>
+  <style>
+    body {
+      font-family: 'Noto Sans KR', Arial, sans-serif;
+      background: #f6f7f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 32px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      color: #2c3e50;
+      text-align: center;
+    }
+
+    .book-info {
+      font-size: 1rem;
+      color: #6c757d;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .review {
+      line-height: 1.7;
+      font-size: 1.1rem;
+      margin-bottom: 24px;
+    }
+
+    .linkto {
+      text-decoration: none;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        margin: 16px;
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .review {
+        font-size: 1rem;
+      }
+    }
+  </style>
+  <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({            
+            tex2jax: {inlineMath: [['$$','$$'], ['$','$'], ['\\(','\\)']]}            
+        });
+    </script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Variational Autoencoder</h1>
+    <ul class="review">
+      <li><a class="linkto" href="#section1">생성 모델</a></li>
+      <li><a class="linkto" href="#section2">최대 우도 추정</a></li>
+      <li><a class="linkto" href="#section3">잠재 변수 모델</a></li>
+      <li><a class="linkto" href="#section4">목적 함수 유도</a></li>
+    </ul>
+  </div>
+
+
+  <div id="section1" class="container">
+    <div class="review">
+      <h2>생성 모델(Generative Model)</h2>
+      생성 모델에 대한 하나의 쉬운 설명은 선택 가능한 여러 확률 분포 가운데 가장 적당한 것을 고르는 것이다. 예를 들면, 데이터의 분포가 표준편차가 1인 정규 분포 가운데 하나라고 가정할 수 있다.
+      $$
+      p(x; \theta)=N(\mu, 1)
+      $$
+    </div>
+  </div>
+
+
+  <div id="section2" class="container">
+    <div class="review">
+      <h2>최대 우도 추정(Maximum Likelihood Estimation)</h2>
+      최대우도추정은 데이터에 대해 가장 적당한 분포를 고르는 방법 가운데 하나다. MLE를 이용하여 데이터에 대한 likelihood가 최대가 되게 하는 분포의 파라메터를 결정할 수 있다.
+      $$
+      N(\mu^*, 1)=p(x; \theta^*) \\
+      \begin{align}
+      \theta^*&=\arg \max_\theta p_\theta(x^{(1)}, x^{(2)},\dots,x^{(n)}) \\
+      &=\arg \max_\theta \prod_{i=1}^n p_\theta(x^{(i)})\\
+      &=\arg \max_\theta \sum_{i=1}^n \log p_\theta(x^{(i)})\\
+      \end{align}
+      $$
+    </div>
+  </div>
+
+  <div id="section3" class="container">
+    <div class="review">
+      <h2>잠재 변수 모델(Latent Variable Model)</h2>
+      데이터 모델링의 복잡성을 효과적으로 관리하기 위해, 관측 가능한 변수 $x$ 이외에 잠재 변수 $z$를 생각한다.
+      $$
+      p(x)=\int p_\theta(x|z)p(z)dz
+      $$
+      따라서 간단한 $p(z)$를 도입하고, MC (Monte Carlo) 방법을 이용한 $p(x)$의 근사치로 MLE 방법으로 최적 $\theta^*$를 구하는 방법을 떠올릴 수 있다.
+      $$
+      \begin{align}
+      p(x)&=\int p_\theta(x|z)p(z)dz \\
+      &\approx\frac{1}{k}\sum_{i=1}^k p_\theta(x|z^{(i)})p(z^{(i)})
+      \end{align}
+      $$
+      하지만 이 방식이 부딛히는 문제는 근사적 관계를 평가하는 방식이 픽셀별 L2 norm과 동치이기 때문에 $||x-\hat{x}||_2 > 0$ 일 때, 의미적으로 먼 샘플의 확률이 더 클 수 있다는
+      점이다.
+    </div>
+  </div>
+
+  <div id="section4" class="container">
+    <div class="review">
+      <h2>목적 함수 유도</h2>
+      위에서 제기한 문제를 극복하기 위해서 이상적인 샘플링 함수 $p(z|x)$를 가정한다. 또 이를 근사하기 위하여 $q_\phi(z|x)$ 를 도입하여 아래와 같이 표현한다.
+      $$
+      \int q_\phi(z|x)dz = 1 \\
+      p(x) = \frac{p(x|z)p(z)}{p(z|x)} \\
+      $$
+      위의 관계를 이용해 아래와 같이 유도한다.
+      $$
+      \begin{align}
+      \log p(x)&=\int \log p(x)q_\phi(z|x)dz \\
+      &=\int \log \frac{p(x|z)p(z)}{p(z|x)}q_\phi(z|x)dz \\
+      &=\int \log \frac{p(x|z)p(z)q_\phi(z|x)}{p(z|x)q_\phi(z|x)}q_\phi(z|x)dz \\
+      &=\int \log \frac{q_\phi(z|x)}{p(z|x)}q_\phi(z|x) + \log \frac{p(x|z)p(z)}{q_\phi(z|x)}q_\phi(z|x)dz \\
+      &= D_{KL}(p(z|x)||q_{\phi}(z|x)) + \int \log \frac{p(x|z)p(z)}{q_\phi(z|x)}q_\phi(z|x)dz \\
+      \text{ELBO} &= \int \log \frac{p(x|z)p(z)}{q_\phi(z|x)}q_\phi(z|x)dz
+      \end{align}
+      $$
+      여기서 $\log p(x)$ 를 고정으로 생각할 때 ELBO를 최대화 하는 것은 $D_{KL}(p(z|x)||q_{\phi}(z|x)) \geq 0$ 의 최소화와 같고, 이는 처음 가정한 이상적인 샘플링
+      함수에 대한 근사 함수의 최적화이다.
+      $$
+      \begin{align}
+      \text{ELBO} &= \int \log \frac{p(x|z)p(z)}{q_\phi(z|x)}q_\phi(z|x)dz \\
+      &= \int \log p(x|z)q_\phi(z|x)dz + \int \log \frac{p(z)}{q_\phi(z|x)}q_\phi(z|x)dz \\
+      &= \mathbb{E}_{z\sim q_\phi(z|x)}[p(x|z)] - D_{KL}(q_\phi(z|x)||p(z)) \\
+      \end{align}
+      $$
+      $\phi$에 대한 ELBO 최대화에 더하여 $p(x|z)=p_\theta(x|z)$에 대한 MLE가 동시에 만족하게 되면 우리가 원하는 잠재 변수 생성 모델 $p_\theta(x|z)$를 얻는다.
+    </div>
+  </div>
+
+
+</body>
+
+</html>

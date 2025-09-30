@@ -1,22 +1,78 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <title>SONG DONGCHAN BLOG</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="https://raw.githubusercontent.com/secondvoca/secondvoca.github.io/refs/heads/main/favicon.ico" type="image/x-icon">
+    <link rel="icon"
+        href="https://raw.githubusercontent.com/secondvoca/secondvoca.github.io/refs/heads/main/favicon.ico"
+        type="image/x-icon">
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
-        header { background: #4a90e2; color: white; padding: 2rem 1rem; text-align: center; }
-        main { max-width: 700px; margin: 2rem auto; background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 2rem; }
-        .accordion { margin-bottom: 1.5rem; border-bottom: 1px solid #eee; }
-        .accordion summary { font-size: 1.2rem; font-weight: bold; cursor: pointer; padding: 0.5rem 0; }
-        .accordion ul { margin: 0.5rem 0 1rem 1.5rem; padding: 0; }
-        .accordion li { margin-bottom: 0.5rem; }
-        .add-page-btn { background: #4a90e2; color: white; border: none; border-radius: 4px; padding: 0.3rem 0.7rem; cursor: pointer; font-size: 0.95rem; }
-        .add-page-btn:hover { background: #357abd; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #4a90e2;
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        main {
+            max-width: 700px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            padding: 2rem;
+        }
+
+        .accordion {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .accordion summary {
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 0.5rem 0;
+        }
+
+        .accordion ul {
+            margin: 0.5rem 0 1rem 1.5rem;
+            padding: 0;
+        }
+
+        .accordion li {
+            margin-bottom: 0.5rem;
+        }
+
+        .add-page-btn {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.3rem 0.7rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .add-page-btn:hover {
+            background: #357abd;
+        }
+
+        .linkto {
+            text-decoration: none;
+        }
     </style>
 </head>
+
 <body>
     <header>
         <h1>SONG DONGCHAN BLOG</h1>
@@ -25,30 +81,34 @@
         <details class="accordion">
             <summary>Generative Model</summary>
             <ul id="research-list">
-                <li><a href="generative_model/variational_autoencoder.html">Variational Autoencoder</a></li>
-                <li><a href="generative_model/proof_MLE_KL.html">Proof of relation between MLE and KL divergence</a></li>
+                <li><a class="linkto" href="generative_model/variational_autoencoder.html">Variational Autoencoder</a></li>
+                <li><a class="linkto" href="generative_model/generative_adversarial_networks.html">Generative Adversarial Networks</a>
+                </li>
+                <li><a class="linkto" href="generative_model/proof_MLE_KL.html">Proof of relation between MLE and KL divergence</a>
+                </li>
             </ul>
         </details>
         <details class="accordion">
             <summary>Information Theory</summary>
             <ul id="research-list">
-                <li><a href="information_theory/entropy.html">Entropy</a></li>
+                <li><a class="linkto" href="information_theory/entropy.html">Entropy</a></li>
             </ul>
         </details>
         <details class="accordion">
             <summary>Book Review</summary>
             <ul id="book-list">
-                <li><a href="books/a_brief_history_of_intelligence.html">A Brief History of Intelligence</a></li>
-                <li><a href="books/a_brief_history_of_china.html">세계사 속 중국사 도감</a></li>
-                <li><a href="books/china_in_world_history.html">옥스퍼드 중국사 수업</a></li>
+                <li><a class="linkto" href="books/a_brief_history_of_intelligence.html">A Brief History of Intelligence</a></li>
+                <li><a class="linkto" href="books/a_brief_history_of_china.html">세계사 속 중국사 도감</a></li>
+                <li><a class="linkto" href="books/china_in_world_history.html">옥스퍼드 중국사 수업</a></li>
             </ul>
         </details>
         <details class="accordion">
             <summary>Etc</summary>
             <ul id="etc-list">
-                <li><a href="#">todo</a></li>
+                <li><a class="linkto" href="#">todo</a></li>
             </ul>
         </details>
     </main>
 </body>
+
 </html>
