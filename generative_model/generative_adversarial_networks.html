@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Variational Autoencoder</title>
+  <title>Generative Adversarial Networks</title>
   <style>
     body {
       font-family: 'Noto Sans KR', Arial, sans-serif;
@@ -72,9 +72,9 @@
 
 <body>
   <div class="container">
-    <h1>Variational Autoencoder</h1>
+    <h1>Generative Adversarial Networks</h1>
     <ul class="review">
-      <li><a class="linkto" href="#section1">생성 모델</a></li>
+      <li><a class="linkto" href="#section1">생성 모델 분류</a></li>
       <li><a class="linkto" href="#section2">최대 우도 추정</a></li>
       <li><a class="linkto" href="#section3">잠재 변수 모델</a></li>
       <li><a class="linkto" href="#section4">목적 함수 유도</a></li>
@@ -84,11 +84,20 @@
 
   <div id="section1" class="container">
     <div class="review">
-      <h2>생성 모델(Generative Model)</h2>
-      생성 모델에 대한 하나의 쉬운 설명은 선택 가능한 여러 확률 분포 가운데 가장 적당한 것을 고르는 것이다. 예를 들면, 데이터의 분포가 표준편차가 1인 정규 분포 가운데 하나라고 가정할 수 있다.
-      $$
-      p(x; \theta)=N(\mu, 1)
-      $$
+      <h2>Taxonomy</h2>
+      전통적인 통계 모델 추정과 생성 모델의 차이 <br>
+      gan의 목적 함수를 유도하는 과정해서 확률의 비를 생각할 수 있고 이러한 비율이 추후에 계산을 용이하게 할 가능성이 있음?<br>
+      gan의 목적 함수를 우도비로 표현할 수 있다.<br>
+      확률 분포 $p(z)$의 기대값은 확정적 값이 된다. $\mathbb{E}[p(x)]$ <br>
+      $\mathbb{E}[p(x)]$ is a single value without probabilitic nature. <br>
+      Nash equilibrium 이 여러 개 일때 발생할 수 있는 문제는 무엇이 있나? <br>
+      <img src="https://wikidocs.net/images/page/228789/taxonomy1.png" alt="Taxonomy of Generative Models" style="max-width: 75%; height: auto; border-radius: 8px;"><br>
+      
+      
+
+
+      연구 주제를 점점 좁게 잡아야 일이 된다.
+
     </div>
   </div>
 
