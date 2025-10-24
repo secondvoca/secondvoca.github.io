@@ -58,6 +58,12 @@
             }
         }
     </style>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({            
+            tex2jax: {inlineMath: [['$$','$$'], ['$','$'], ['\\(','\\)']]}            
+        });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 
 </head>
 
@@ -70,7 +76,7 @@
         <h2>강화학습</h2>
 
         <p class="review">
-            순차적 의사 결정 문제에서 누적 보상을 최대화하도록 하는 행동을 강화하는 기계 학습 방법
+            순차적 의사 결정 문제에서 에이전트가 누적 보상을 최대화하는 행동을 하도록 훈련하는 기계학습 방법
         </p>
     </div>
 
@@ -78,7 +84,11 @@
         <h2>순차적 의사 결정 문제</h2>
 
         <p class="review">
-            이산적인 순서에 따른 결정이 요구되는 문제 상황
+            하나의 요리를 만드는 과정처럼 매 단계에서 적절한 행동을 선택해야 하는 문제, 강화학습에서는 개념적으로 Markov Decision Process (MDP)로 모델링된다.
+
+            $$
+            MDP \equiv (S, A, P, R, \gamma)
+            $$
         </p>
     </div>
 
