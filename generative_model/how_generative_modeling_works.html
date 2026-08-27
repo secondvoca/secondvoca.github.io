@@ -5,28 +5,178 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>[Deep Learning] 생성 모델과 다양체 학습(Manifold Learning)</title>
     
-    <!-- 안전한 MathJax (수식 렌더링) CDN 주소로 교체 -->
-    <script src="https://cloudflare.com" async></script>
+    <!-- MathJax (수식 렌더링) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
     
-    <!-- 안전한 Prism.js (코드 하이라이팅) CDN 주소 -->
-    <link rel="stylesheet" href="https://cloudflare.com">
-    <script src="https://cloudflare.com"></script>
-    <script src="https://cloudflare.com"></script>
+    <!-- Google Fonts & Font Awesome 코피 아이콘용 -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Prism.js (One Dark Theme 스타일로 지정) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 
     <style>
-        body { font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; line-height: 1.7; color: #333; max-width: 800px; margin: 0 auto; padding: 40px 20px; background-color: #f9f9f9; }
-        h1 { font-size: 2.2rem; color: #111; border-bottom: 3px solid #333; padding-bottom: 15px; margin-bottom: 30px; }
-        h3 { font-size: 1.3rem; color: #0066cc; margin-top: 40px; margin-bottom: 15px; background: #e6f2ff; padding: 10px 15px; border-left: 5px solid #0066cc; }
-        p { margin-bottom: 20px; font-size: 1.05rem; }
-        .intro-box { background: #fff; border: 1px solid #ddd; padding: 20px; border-radius: 8px; margin-bottom: 30px; font-style: italic; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .answer { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 30px; }
-        ol, ul { padding-left: 20px; margin-bottom: 20px; }
-        li { margin-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; margin: 25px 0; background: #fff; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #f2f2f2; font-weight: bold; }
-        pre { border-radius: 8px; margin: 20px 0 !important; }
-        code { font-family: 'Consolas', monospace; font-size: 0.95rem; }
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            line-height: 1.8; 
+            color: #334155; 
+            max-width: 840px; 
+            margin: 0 auto; 
+            padding: 50px 20px; 
+            background-color: #f8fafc; 
+        }
+        h1 { 
+            font-size: 2.4rem; 
+            color: #0f172a; 
+            border-bottom: 4px solid #3b82f6; 
+            padding-bottom: 20px; 
+            margin-bottom: 35px; 
+            font-weight: 700;
+        }
+        h3 { 
+            font-size: 1.35rem; 
+            color: #1e3a8a; 
+            margin-top: 45px; 
+            margin-bottom: 20px; 
+            background: #eff6ff; 
+            padding: 14px 20px; 
+            border-left: 6px solid #3b82f6; 
+            border-radius: 0 8px 8px 0;
+            font-weight: 700;
+        }
+        p { margin-bottom: 22px; font-size: 1.05rem; }
+        .intro-box { 
+            background: #ffffff; 
+            border: 1px solid #e2e8f0; 
+            border-left: 5px solid #64748b;
+            padding: 22px; 
+            border-radius: 8px; 
+            margin-bottom: 35px; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
+        }
+        .answer { 
+            background: #ffffff; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); 
+            margin-bottom: 35px; 
+        }
+        ol, ul { padding-left: 24px; margin-bottom: 22px; }
+        li { margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; margin: 30px 0; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        th, td { padding: 14px 18px; text-align: left; }
+        th { background-color: #f1f5f9; color: #1e293b; font-weight: 700; border-bottom: 2px solid #e2e8f0; }
+        td { border-bottom: 1px solid #f1f5f9; color: #334155; }
+        tr:last-child td { border-bottom: none; }
+        
+        /* --- 고급 코드 블록 스타일 디자인 --- */
+        .code-container {
+            position: relative;
+            margin: 30px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            background: #1d1f21;
+        }
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2d3139;
+            padding: 10px 20px;
+            color: #9da5b4;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #21252b;
+        }
+        .code-header .left-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .code-header .dots {
+            display: flex;
+            gap: 6px;
+        }
+        .code-header .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .code-header .dot-red { background: #ff5f56; }
+        .code-header .dot-yellow { background: #ffbd2e; }
+        .code-header .dot-green { background: #27c93f; }
+        .code-header .lang-badge {
+            font-weight: 500;
+            color: #abb2bf;
+            text-transform: uppercase;
+            font-family: 'Fira Code', monospace;
+        }
+        .copy-btn {
+            background: transparent;
+            border: 1px solid #4b5263;
+            color: #abb2bf;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: #3e4451;
+            color: #ffffff;
+            border-color: #636d83;
+        }
+        pre[class*="language-"] {
+            margin: 0 !important;
+            padding: 20px !important;
+            background: #1e1e24 !important;
+            border-radius: 0 !important;
+        }
+        code[class*="language-"] {
+            font-family: 'Fira Code', 'Consolas', monospace !important;
+            font-size: 0.92rem !important;
+            line-height: 1.6 !important;
+        }
+
+        .result-images-container {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 40px;
+        justify-content: space-between;
+    }
+    .image-card {
+        flex: 1;
+        background: #fff;
+        border: 1px solid #e1e4e8;
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .image-card img {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: block;
+    }
+    .image-card p {
+        margin: 8px 0 0 0;
+        font-size: 0.9rem;
+        font-weight: bold;
+        color: #555;
+    }
+    /* 모바일 화면에서는 이미지가 세로로 한 줄씩 나오도록 대응 */
+    @media (max-width: 600px) {
+        .result-images-container {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
     </style>
 </head>
 <body>
@@ -101,9 +251,22 @@
     </div>
 
     <h3>🛠️ 실습 코드: PCA vs 선형 AE vs 비선형 AE 격자 탐색</h3>
-    <p>세 모델이 데이터 공간을 어떻게 다르게 해석하는지 확인하기 위해, 2차원 잠재 공간의 \([-10, 10]\) 구간을 \(10 \times 10\) 격자로 샘플링하여 하나의 \(280 \times 280\) 행렬 이미지로 복원·비교하는 파이토치 핵심 코드입니다.</p>
+    <p>세 모델이 데이터 공간을 어떻게 다르게 해석하는지 확인하기 위해, 2차원 잠재 공간의 \([-10, 10]\) 구간을 \(10 	imes 10\) 격자로 샘플링하여 하나의 \(280 	imes 280\) 행렬 이미지로 복원·비교하는 파이토치 핵심 코드입니다.</p>
 
-    <pre><code class="language-python">import numpy as np
+    <!-- 고급 맥북 스타일 창 스타일 코드 블록 구성 -->
+    <div class="code-container">
+        <div class="code-header">
+            <div class="left-meta">
+                <div class="dots">
+                    <div class="dot dot-red"></div>
+                    <div class="dot dot-yellow"></div>
+                    <div class="dot dot-green"></div>
+                </div>
+                <span class="lang-badge">mnist_manifold_comparison.py</span>
+            </div>
+            <button class="copy-btn" onclick="copyCode()"><i class="fa-regular fa-copy"></i> Copy Code</button>
+        </div>
+        <pre><code class="language-python">import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -172,9 +335,42 @@ plot_large_matrix(images_pca, "1. PCA Subspace")
 plot_large_matrix(images_linear, "2. Linear AE Subspace")
 plot_large_matrix(images_nonlinear, "3. Non-linear AE Manifold")</code></pre>
 
+<h4 style="margin-top: 30px; margin-bottom: 15px; color: #444; font-size: 1.1rem; font-weight: bold;">📊 모델별 잠재 공간 격자 탐색 결과 (실행 결과)</h4>
+
+<div class="result-images-container">
+    <div class="image-card">
+        <img src="../assets/img/result_pca.png" alt="PCA 결과">
+        <p>1. PCA Subspace</p>
+    </div>
+    <div class="image-card">
+        <img src="../assets/img/result_linear_ae.png" alt="Linear AE 결과">
+        <p>2. Linear AE Subspace</p>
+    </div>
+    <div class="image-card">
+        <img src="../assets/img/result_nonlinear_ae.png" alt="Non-linear AE 결과">
+        <p>3. Non-linear AE Manifold</p>
+    </div>
+</div>
+
+    </div>
+
     <div class="intro-box" style="margin-top: 40px; background: #fffdf5; border-color: #f5eed3;">
         <strong>맺음말:</strong> 결과적으로 생성 모델은 수치적 연속성, 정보이론적 제약, SGD의 기하학적 편향이 융합되어 데이터를 통째로 암기하는 대신 <strong>데이터를 지탱하는 부드러운 하위 차원의 매니폴드를 선택</strong>하게 됩니다. 활성화 함수는 이 평평한 초평면을 곡면으로 구부려 진짜 현실 데이터와 유사한 고차원 비선형 공간을 모사할 수 있게 유도하는 핵심 열쇠입니다.
     </div>
 
+    <script>
+        function copyCode() {
+            const codeText = document.querySelector('code.language-python').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.innerHTML = '<i class="fa-solid fa-check" style="color: #27c93f;"></i> Copied!';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy Code';
+                }, 2000);
+            }).catch(err => {
+                console.error('클립보드 복사 실패:', err);
+            });
+        }
+    </script>
 </body>
 </html>
