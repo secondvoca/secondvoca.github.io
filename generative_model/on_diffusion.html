@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>디퓨전 모델(Diffusion Models)의 수학적 본질과 매니폴드 형성 원리</title>
     
-    <!-- GitHub Pages 스타일 가이드 및 가독성 최적화를 위한 부트스트랩 CSS -->
-    <link rel="stylesheet" href="https://cloudflare.com" integrity="sha512-b2QcS5Ej398VWMNda5BQ6Fl23ekE5iY60v95pdOhKn3vLNc9879W53iO2nTYinsycn34cC8t33a9pgM156FBUg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- 부트스트랩 CSS -->
+    <link rel="stylesheet" href="https://jsdelivr.net">
     
-    <!-- 안전한 수식 렌더링을 위한 MathJax 설정 (polyfill.io 전면 제거) -->
+    <!-- MathJax v3 구성 설정: 스크립트 로드 전에 반드시 먼저 선언되어야 합니다 -->
     <script>
         window.MathJax = {
             tex: {
@@ -17,12 +17,12 @@
                 processEscapes: true
             },
             options: {
-                ignoreHtmlClass: 'tex2jax_ignore',
-                processHtmlClass: 'tex2jax_process'
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
             }
         };
     </script>
-    <script src="https://cloudflare.com" integrity="sha512-6Sg7vI7fVdf6Sg2E0L0b14467j9MvYshY4M77O/SxFm8OQZ2R5G8yW2W01F7SgG2vD9z497Fh8M2j1wF/P7fkw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- 공식적이고 안전한 jsDelivr CDN을 통한 MathJax v3 최신 버전 로드 -->
+    <script id="MathJax-script" async src="https://jsdelivr.net"></script>
     
     <style>
         body {
@@ -86,7 +86,7 @@
         <div class="answer-box">
             <p>정답은 <strong>4를 곱해야 합니다.</strong> 분산의 성질과 표준편차의 정의를 통해 쉽게 증명할 수 있습니다.</p>
             <ul>
-                <li><strong>수학적 증명:</strong> 표준정규분포를 따르는 변수 $X$의 분산이 $Var(X) = 1$일 때, 임의의 상수 $c$를 곱한 변수의 분산은 $Var(cX) = c^2 Var(X) = c^2$이 됩니다. 표준편차($\sigma$)는 분산에 루트를 씌운 값이므로 $\sigma_{cX} = \sqrt{c^2} = |c| $ 가 됩니다. 따라서 표준편차를 4로 만들려면 정확히 $c = 4$를 곱해야 합니다.</li>
+                <li><strong>수학적 증명:</strong> 표준정규분포를 따르는 변수 $X$의 분산이 $Var(X) = 1$일 때, 임의의 상수 $c$를 곱한 변수의 분산은 $Var(cX) = c^2 Var(X) = c^2$이 됩니다. 표준편차($\sigma$)는 분산에 루트를 씌운 값이므로 $\sigma_{cX} = \sqrt{c^2} = |c|$ 가 됩니다. 따라서 표준편차를 4로 만들려면 정확히 $c = 4$를 곱해야 합니다.</li>
                 <li><strong>직관적 이해:</strong> 분산은 편차를 <strong>제곱</strong>한 값이고, 표준편차는 원래 데이터의 <strong>실제 거리 단위</strong>를 나타냅니다. 데이터의 스케일을 4배 키우면 데이터 간의 물리적 거리가 4배 늘어나므로 표준편차도 정직하게 4배가 됩니다.</li>
             </ul>
         </div>
@@ -100,7 +100,7 @@
             <ul>
                 <li>통계학에서 가우시안 분포 $\mathcal{N}(\mu, \sigma^2)$를 표기할 때 두 번째 자리에는 표준편차가 아닌 <strong>분산(Variance)</strong>을 적기로 약속되어 있습니다. 따라서 분포 자체를 명시하는 위 식에서는 분산인 $\beta_t I$를 그대로 적는 것이 맞습니다.</li>
                 <li>다만, 이 분포에서 실제로 샘플링을 수행하는 코드(Reparameterization Trick)로 변환할 때는 노이즈 $\epsilon$에 표준편차인 <strong>$\sqrt{\beta_t}$</strong>를 곱해 주게 됩니다: <br> 
-                <span class="highlight">$x_t = \sqrt{1 - \beta_t}x_{t-1} + \sqrt{\beta_t}\epsilon$</span></li>
+                <span class="highlight">$$x_t = \sqrt{1 - \beta_t}x_{t-1} + \sqrt{\beta_t}\epsilon$$</span></li>
             </ul>
         </div>
 
@@ -176,7 +176,7 @@
         <div class="answer-box">
             <p>원래 디퓨전의 철학은 '바로 한 단계 전($t-1$)의 평균을 맞추는 것'이 맞습니다. 하지만 이를 수학적으로 증명 및 전개하는 과정에서 <strong>놀라운 동치 관계</strong>가 증명되었습니다.</p>
             <ol>
-                <li>원래의 목적식은 이론적 실제 평균 $\mu_t$와 모델의 예측 평균 $\mu_\theta$의 차이를 줄이는 $\Vert \mu_t - \mu_\theta \Vert^2$ 입니다.</li>
+                <li>원래의 목적식은 이론적 실제 평균 $\mu_t$와 모델의 예측 평균 $\mu_\theta$의 차이를 줄이는 $\| \mu_t - \mu_\theta \|^2$ 입니다.</li>
                 <li>여기에 여러 단계를 건너뛰는 공식인 $x_0 = \frac{1}{\sqrt{\bar{\alpha}_t}} \left( x_t - \sqrt{1 - \bar{\alpha}_t}\epsilon \right)$를 대입하여 식을 정리합니다.</li>
                 <li>그 결과 복잡한 계수와 변수들이 서로 상쇄되며 내부 알맹이인 <span class="highlight">$\mathbb{E} [\|\epsilon - \epsilon_\theta\|^2]$</span>만 남게 됩니다.</li>
             </ol>
