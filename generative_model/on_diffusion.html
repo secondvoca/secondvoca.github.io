@@ -5,115 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>생성 모델과 다양체 학습(Manifold Learning)의 수학적 본질</title>
     
-    <!-- 속도 저하를 유발하는 외부 무거운 CSS(부트스트랩)를 전면 제거하고 미니멀 디자인 폰트 적용 -->
+    <!-- MathJax (수식 렌더링) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+    
+    <!-- Google Fonts & Font Awesome 코피 아이콘용 -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Prism.js (One Dark Theme 스타일로 지정) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.7;
-            color: #333;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            line-height: 1.8; 
+            color: #334155; 
+            max-width: 840px; 
+            margin: 0 auto; 
+            padding: 50px 20px; 
+            background-color: #f8fafc; 
         }
-        .blog-container {
-            max-width: 800px;
-            margin: 50px auto;
-            background: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        header {
-            border-bottom: 1px solid #eee;
-            padding-bottom: 20px;
-            margin-bottom: 40px;
-        }
-        h1 {
-            font-size: 2rem;
-            color: #111;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-        .text-muted {
-            color: #666;
-            font-size: 0.95rem;
-        }
-        .question-box {
-            background-color: #f0f7ff;
-            border-left: 5px solid #007bff;
-            padding: 18px 20px;
-            margin-top: 40px;
-            margin-bottom: 20px;
-            border-radius: 0 8px 8px 0;
-        }
-        .question-box h3 {
-            margin: 0;
-            font-size: 1.25rem;
-            color: #0056b3;
+        h1 { 
+            font-size: 2.4rem; 
+            color: #0f172a; 
+            border-bottom: 4px solid #3b82f6; 
+            padding-bottom: 20px; 
+            margin-bottom: 35px; 
             font-weight: 700;
         }
-        .answer-box {
-            margin-bottom: 40px;
+        h3 { 
+            font-size: 1.35rem; 
+            color: #1e3a8a; 
+            margin-top: 45px; 
+            margin-bottom: 20px; 
+            background: #eff6ff; 
+            padding: 14px 20px; 
+            border-left: 6px solid #3b82f6; 
+            border-radius: 0 8px 8px 0;
+            font-weight: 700;
         }
-        .answer-box p {
-            margin-bottom: 16px;
+        p { margin-bottom: 22px; font-size: 1.05rem; }
+        .intro-box { 
+            background: #ffffff; 
+            border: 1px solid #e2e8f0; 
+            border-left: 5px solid #64748b;
+            padding: 22px; 
+            border-radius: 8px; 
+            margin-bottom: 35px; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
         }
-        ul, ol {
-            padding-left: 20px;
-            margin-bottom: 20px;
+        .answer { 
+            background: #ffffff; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03); 
+            margin-bottom: 35px; 
         }
-        li {
-            margin-bottom: 8px;
-        }
-        .highlight-box {
-            background-color: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin: 20px 0;
-            text-align: center;
-            font-weight: 500;
-            border-radius: 4px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-            font-size: 0.95rem;
-        }
-        th, td {
-            border: 1px solid #dee2e6;
-            padding: 12px;
-            text-align: center;
-        }
-        th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-        }
-        footer {
-            margin-top: 60px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            text-align: center;
-            color: #888;
-            font-size: 0.85rem;
-        }
+        ol, ul { padding-left: 24px; margin-bottom: 22px; }
+        li { margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; margin: 30px 0; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        th, td { padding: 14px 18px; text-align: left; }
+        th { background-color: #f1f5f9; color: #1e293b; font-weight: 700; border-bottom: 2px solid #e2e8f0; }
+        td { border-bottom: 1px solid #f1f5f9; color: #334155; }
+        tr:last-child td { border-bottom: none; }
     </style>
 
-    <!-- 참고 파일과 동일한 초고속 대역폭의 cjsjs MathJax v2 빌드 및 완벽 호환 구성 설정 -->
-    <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({
-            tex2jax: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true
-            },
-            "HTML-CSS": { 
-                availableFonts: ["TeX"],
-                webFont: "TeX"
-            }
-        });
-    </script>
-    <script src="https://cloudflare.com" async></script>
 </head>
 <body>
 
@@ -124,6 +82,11 @@
         <p class="text-muted">수학적 유도로 이해하는 생성 모델의 시각적·직관적 비밀</p>
     </header>
 
+        <!-- 들어가는 글 -->
+    <div class="intro-box">
+        <strong>들어가는 글:</strong> 디퓨전 모델은 오늘날 초고품질의 이미지를 생성하는 핵심 기술로 자리 잡았습니다. 하지만 명시적인 병목(Bottleneck) 구조가 없는 디퓨전 모델이 어떻게 훈련 데이터를 그대로 암기(Overfitting)하지 않고 고차원 데이터 공간에서 '비슷하지만 새로운' 매니폴드(Manifold)를 정교하게 학습하는 걸까요? 수식 표기법의 사소한 오해부터 확률 밀도의 기하학적 수렴 과정까지, 디퓨전 모델의 이면에 숨겨진 통계학적 본질을 명쾌한 Q&A 형식으로 풀어봅니다.
+    </div>
+
     <!-- Q1 -->
     <div class="question-box">
         <h3>Q1. 표준편차가 4인 가우시안 샘플을 만들려면 표준정규분포(표준편차 1) 샘플에 얼마를 곱해야 하나요?</h3>
@@ -131,51 +94,51 @@
     <div class="answer-box">
         <p>정답은 <strong>4를 곱해야 합니다.</strong> 분산의 성질과 표준편차의 정의를 통해 쉽게 증명할 수 있습니다.</p>
         <ul>
-            <li><strong>수학적 증명:</strong> 표준정규분포를 따르는 변수 $X$의 분산이 $Var(X) = 1$일 때, 임의의 상수 $c$를 곱한 변수의 분산은 $Var(cX) = c^2 Var(X) = c^2$이 됩니다. 표준편차($\sigma$)는 분산에 루트를 씌운 값이므로 $\sigma_{cX} = \sqrt{c^2} = |c|$ 가 됩니다. 따라서 표준편차를 4로 만들려면 정확히 $c = 4$를 곱해야 합니다.</li>
+            <li><strong>수학적 증명:</strong> 표준정규분포를 따르는 변수 \(X\)의 분산이 \(Var(X) = 1\)일 때, 임의의 상수 \(c\)를 곱한 변수의 분산은 \(Var(cX) = c^2 Var(X) = c^2\)이 됩니다. 표준편차(\(\sigma\))는 분산에 루트를 씌운 값이므로 \(\sigma_{cX} = \sqrt{c^2} = |c|\) 가 됩니다. 따라서 표준편차를 4로 만들려면 정확히 \(c = 4\)를 곱해야 합니다.</li>
             <li><strong>직관적 이해:</strong> 분산은 편차를 <strong>제곱</strong>한 값이고, 표준편차는 원래 데이터의 <strong>실제 거리 단위</strong>를 나타냅니다. 데이터의 스케일을 4배 키우면 데이터 간의 물리적 거리가 4배 늘어나므로 표준편차도 정직하게 4배가 됩니다.</li>
         </ul>
     </div>
 
     <!-- Q2 -->
     <div class="question-box">
-        <h3>Q2. 디퓨전의 Forward 수식 $q(x_t \mid x_{t-1}) = \mathcal{N}(x_t ; \sqrt{1 - \beta_t}x_{t-1}, \beta_t I)$에서 $I$ 앞에는 왜 루트가 없나요?</h3>
+        <h3>Q2. 디퓨전의 Forward 수식 \(q(x_t \mid x_{t-1}) = \mathcal{N}(x_t ; \sqrt{1 - \beta_t}x_{t-1}, \beta_t I)\)에서 \(I\) 앞에는 왜 루트가 없나요?</h3>
     </div>
     <div class="answer-box">
         <p>수식이 완전히 올바르게 작성되었기 때문입니다. <strong>가우시안 분포 표기법의 수학적 약속</strong> 때문입니다.</p>
         <ul>
-            <li>통계학에서 가우시안 분포 $\mathcal{N}(\mu, \sigma^2)$를 표기할 때 두 번째 자리에는 표준편차가 아닌 <strong>분산(Variance)</strong>을 적기로 약속되어 있습니다. 따라서 분포 자체를 명시하는 위 식에서는 공분산 행렬인 $\beta_t I$를 그대로 적는 것이 맞습니다.</li>
-            <li>다만, 이 분포에서 실제로 샘플링을 수행하는 코드(Reparameterization Trick)로 변환할 때는 노이즈 $\epsilon$에 표준편차인 <strong>$\sqrt{\beta_t}$</strong>를 곱해 주게 됩니다.</li>
+            <li>통계학에서 가우시안 분포 \(\mathcal{N}(\mu, \sigma^2)\)를 표기할 때 두 번째 자리에는 표준편차가 아닌 <strong>분산(Variance)</strong>을 적기로 약속되어 있습니다. 따라서 분포 자체를 명시하는 위 식에서는 공분산 행렬인 \(\beta_t I\)를 그대로 적는 것이 맞습니다.</li>
+            <li>다만, 이 분포에서 실제로 샘플링을 수행하는 코드(Reparameterization Trick)로 변환할 때는 노이즈 \(\epsilon\)에 표준편차인 <strong>\(\sqrt{\beta_t}\)</strong>를 곱해 주게 됩니다.</li>
         </ul>
         <div class="highlight-box">
-            실제 샘플링 구현 수식: $$x_t = \sqrt{1 - \beta_t}x_{t-1} + \sqrt{\beta_t}\epsilon$$
+            실제 샘플링 구현 수식: \(x_t = \sqrt{1 - \beta_t}x_{t-1} + \sqrt{\beta_t}\epsilon\)
         </div>
     </div>
 
     <!-- Q3 -->
     <div class="question-box">
-        <h3>Q3. 임의의 실제 데이터셋($x_0$)을 가우시안 분포라고 가정하는 것이 타당한가요?</h3>
+        <h3>Q3. 임의의 실제 데이터셋(\(x_0\))을 가우시안 분포라고 가정하는 것이 타당한가요?</h3>
     </div>
     <div class="answer-box">
-        <p><strong>아닙니다. 실제 데이터($x_0$)는 절대 가우시안 분포가 아닙니다.</strong> 디퓨전 모델은 데이터 자체를 가우시안이라고 가정하지 않습니다.</p>
+        <p><strong>아닙니다. 실제 데이터(\(x_0\))는 절대 가우시안 분포가 아닙니다.</strong> 디퓨전 모델은 데이터 자체를 가우시안이라고 가정하지 않습니다.</p>
         <ul>
             <li>가우시안 분포를 따르는 것은 데이터 자체가 아니라 단계를 넘어갈 때 더해지는 <strong>'노이즈를 가하는 방식(전이 확률, Transition)'</strong>입니다.</li>
-            <li>초기 단계($t$가 작을 때)의 데이터 분포는 원래의 복잡한 멀티모달 구조를 그대로 유지합니다. 그러나 이 가우시안 노이즈가 1000번 가량 누적되면서 마지막 단계($t=T$)에 이르면 통계학의 중심극한정리에 의해 원래 데이터 구조가 완전히 지워지고 <strong>완벽한 표준 가우시안 노이즈 $\mathcal{N}(0, I)$로 수렴</strong>하게 됩니다.</li>
+            <li>초기 단계(\(t\)가 작을 때)의 데이터 분포는 원래의 복잡한 멀티모달 구조를 그대로 유지합니다. 그러나 이 가우시안 노이즈가 1000번 가량 누적되면서 마지막 단계(\(t=T\))에 이르면 통계학의 중심극한정리에 의해 원래 데이터 구조가 완전히 지워지고 <strong>완벽한 표준 가우시안 노이즈 \(\mathcal{N}(0, I)\)로 수렴</strong>하게 됩니다.</li>
         </ul>
     </div>
 
     <!-- Q4 -->
     <div class="question-box">
-        <h3>Q4. Forward process 식을 굳이 복잡한 계수($\sqrt{1-\beta_t}$) 구조로 정의한 이유는 무엇인가요?</h3>
+        <h3>Q4. Forward process 식을 굳이 복잡한 계수(\(\sqrt{1-\beta_t}\)) 구조로 정의한 이유는 무엇인가요?</h3>
     </div>
     <div class="answer-box">
         <p>데이터 전체의 <strong>총 분산(Variance)을 시작부터 끝까지 항상 '1'로 일정하게 유지(Variance-Preserving)하기 위해서</strong>입니다.</p>
         <ul>
-            <li>입력 데이터 $x_0$의 분산을 1로 전처리했다고 가정했을 때, 앞서 배운 분산의 선형 결합 공식을 대입하면 다음과 같이 총 분산이 매 단계 완벽하게 보존됩니다:
+            <li>입력 데이터 \(x_0\)의 분산을 1로 전처리했다고 가정했을 때, 앞서 배운 분산의 선형 결합 공식을 대입하면 다음과 같이 총 분산이 매 단계 완벽하게 보존됩니다:
                 <div style="margin: 15px 0; text-align: center; font-weight: bold;">
-                    $Var(x_1) = (\sqrt{1-\beta_1})^2 Var(x_0) + (\sqrt{\beta_1})^2 Var(\epsilon) = (1-\beta_1)\cdot 1 + \beta_1\cdot 1 = 1$
+                    \(Var(x_1) = (\sqrt{1-\beta_1})^2 Var(x_0) + (\sqrt{\beta_1})^2 Var(\epsilon) = (1-\beta_1)\cdot 1 + \beta_1\cdot 1 = 1\)
                 </div>
             </li>
-            <li><strong>이유:</strong> 데이터의 외형적 크기(스케일)를 일정하게 묶어놓아야 역과정을 학습하는 딥러닝 신경망(U-Net)이 크기 변화로 인한 혼란을 겪지 않으며, 마지막 $x_T$ 단계에서 군더더기 없는 완벽한 표준 가우시안 노이즈를 코드로 쉽게 생성($\text{torch.randn}$)할 수 있기 때문입니다.</li>
+            <li><strong>이유:</strong> 데이터의 외형적 크기(스케일)를 일정하게 묶어놓아야 역과정을 학습하는 딥러닝 신경망(U-Net)이 크기 변화로 인한 혼란을 겪지 않으며, 마지막 \(x_T\) 단계에서 군더더기 없는 완벽한 표준 가우시안 노이즈를 코드로 쉽게 생성(\(\text{torch.randn}\))할 수 있기 때문입니다.</li>
         </ul>
     </div>
 
@@ -186,8 +149,8 @@
     <div class="answer-box">
         <p>명시적인 차원 압축 구조가 없더라도 <strong>연속성 제약과 확률 공간의 최적화 과정</strong>을 통해 정교한 데이터 매니폴드가 형성됩니다.</p>
         <ul>
-            <li><strong>GAN:</strong> 뉴럴 네트워크는 연속 함수입니다. 가짜 노이즈 공간($Z$)에서 가까운 두 점은 실제 이미지 공간($X$)에서도 가까워야 합니다. 판별기($D$)에게 걸리지 않고 가짜 이미지 사이를 자연스럽게 이어 붙이기 위해, 생성기($G$)는 실제 데이터가 존재하는 얇은 매니폴드 선상을 따라 걷는 '최단의 지름길 매핑'을 개척합니다.</li>
-            <li><strong>Diffusion:</strong> 디퓨전 모델이 예측하는 노이즈는 수학적으로 데이터 확률 밀도의 기울기 벡터인 <strong>스코어(Score, $\nabla_x \log p(x)$)</strong>를 나타냅니다. 공간 전체에서 고밀도 영역(데이터 매니폴드 중심축)을 향하도록 촘촘하게 새겨진 '인력 벡터장'을 통째로 학습하기 때문에, 노이즈 상태에서의 미세한 움직임이 역과정을 거치며 부드러운 매니폴드 이동으로 번역됩니다.</li>
+            <li><strong>GAN:</strong> 뉴럴 네트워크는 연속 함수입니다. 가짜 노이즈 공간(\(Z\))에서 가까운 두 점은 실제 이미지 공간(\(X\))에서도 가까워야 합니다. 판별기(\(D\))에게 걸리지 않고 가짜 이미지 사이를 자연스럽게 이어 붙이기 위해, 생성기(\(G\))는 실제 데이터가 존재하는 얇은 매니폴드 선상을 따라 걷는 '최단의 지름길 매핑'을 개척합니다.</li>
+            <li><strong>Diffusion:</strong> 디퓨전 모델이 예측하는 노이즈는 수학적으로 데이터 확률 밀도의 기울기 벡터인 <strong>스코어(Score, \(\nabla_x \log p(x)\))</strong>를 나타냅니다. 공간 전체에서 고밀도 영역(데이터 매니폴드 중심축)을 향하도록 촘촘하게 새겨진 '인력 벡터장'을 통째로 학습하기 때문에, 노이즈 상태에서의 미세한 움직임이 역과정을 거치며 부드러운 매니폴드 이동으로 번역됩니다.</li>
         </ul>
         
         <table>
@@ -220,22 +183,22 @@
 
     <!-- Q6 -->
     <div class="question-box">
-        <h3>Q6. 손실 함수 $L_{simple} = \mathbb{E} [\|\epsilon - \epsilon_\theta(x_t, t)\|^2]$는 왜 단계별($t$와 $t-1$) 차이가 아니라 누적 노이즈 $\epsilon$을 맞추나요?</h3>
+        <h3>Q6. 손실 함수 \(L_{simple} = \mathbb{E} [\|\epsilon - \epsilon_\theta(x_t, t)\|^2]\)는 왜 단계별(\(t\)와 \(t-1\)) 차이가 아니라 누적 노이즈 \(\epsilon\)을 맞추나요?</h3>
     </div>
     <div class="answer-box">
-        <p>원래 디퓨전의 철학은 '바로 한 단계 전($t-1$)의 평균을 맞추는 것'이 맞습니다. 하지만 이를 수학적으로 증명 및 전개하는 과정에서 <strong>놀라운 동치 관계</strong>가 증명되었습니다.</p>
+        <p>원래 디퓨전의 철학은 '바로 한 단계 전(\(t-1\))의 평균을 맞추는 것'이 맞습니다. 하지만 이를 수학적으로 증명 및 전개하는 과정에서 <strong>놀라운 동치 관계</strong>가 증명되었습니다.</p>
         <ol>
-            <li>원래의 목적식은 이론적 실제 평균 $\mu_t$와 모델의 예측 평균 $\mu_\theta$의 차이를 줄이는 $\| \mu_t - \mu_\theta \|^2$ 입니다.</li>
-            <li>여기에 여러 단계를 건너뛰는 공식인 $x_0 = \frac{1}{\sqrt{\bar{\alpha}_t}} \left( x_t - \sqrt{1 - \bar{\alpha}_t}\epsilon \right)$를 대입하여 식을 정리합니다.</li>
-            <li>그 결과 복잡한 계수와 변수들이 서로 빼지면서 상쇄되고 내부 알맹이인 <strong>$\mathbb{E} [\|\epsilon - \epsilon_\theta\|^2]$</strong>만 남게 됩니다.</li>
+            <li>원래의 목적식은 이론적 실제 평균 \(\mu_t\)와 모델의 예측 평균 \(\mu_\theta\)의 차이를 줄이는 \(\| \mu_t - \mu_\theta \|^2\) 입니다.</li>
+            <li>여기에 여러 단계를 건너뛰는 공식인 \(x_0 = \frac{1}{\sqrt{\bar{\alpha}_t}} \left( x_t - \sqrt{1 - \bar{\alpha}_t}\epsilon \right)\)를 대입하여 식을 정리합니다.</li>
+            <li>그 결과 복잡한 계수와 변수들이 서로 빼지면서 상쇄되고 내부 알맹이인 <strong>\(\mathbb{E} [\|\epsilon - \epsilon_\theta\|^2]\)</strong>만 남게 됩니다.</li>
         </ol>
-        <p>즉, 한 단계 전으로 돌아가기 위해 깎아내야 할 미세한 조각을 찾는 행위는, <strong>현재 $x_t$에 스며있는 전체 누적 노이즈 $\epsilon$의 형태를 파악하는 것과 수학적으로 100% 완벽하게 동일한 작업</strong>입니다. 컴퓨터에게 매번 복잡한 평균 계산 규칙을 학습시키는 것보다 순수한 가우시안 노이즈 자체를 타겟으로 주는 것이 학습 효율과 안정성 면에서 훨씬 우수하기 때문에 이 식이 최종 표준 손실 함수가 되었습니다.</p>
+        <p>즉, 한 단계 전으로 돌아가기 위해 깎아내야 할 미세한 조각을 찾는 행위는, <strong>현재 \(x_t\)에 스며있는 전체 누적 노이즈 \(\epsilon\)의 형태를 파악하는 것과 수학적으로 100% 완벽하게 동일한 작업</strong>입니다. 컴퓨터에게 매번 복잡한 평균 계산 규칙을 학습시키는 것보다 순수한 가우시안 노이즈 자체를 타겟으로 주는 것이 학습 효율과 안정성 면에서 훨씬 우수하기 때문에 이 식이 최종 표준 손실 함수가 되었습니다.</p>
     </div>
-
-    <footer>
-        <p>© 2026 Deep Learning Math Blog. Built for GitHub Pages.</p>
-    </footer>
 </div>
+
+    <div class="intro-box" style="margin-top: 40px; background: #fffdf5; border-color: #f5eed3;">
+        <strong>맺음말:</strong> 결과적으로 디퓨전 모델은 단순한 이미지 픽셀의 나열을 암기하는 모델이 아닙니다. 수학적인 연속성 보존(Variance-Preserving), 정보이론적 동치 관계, 그리고 공간 전체를 아우르는 부드러운 스코어 벡터장(Score-based Vector Field)의 결합을 통해 데이터의 근본적인 다양체(Manifold)를 학습하는 우아한 시스템입니다. 수식이 복잡해 보여도 그 내부의 알맹이는 "노이즈를 단계적으로 걷어내며 실제 데이터 분포의 핵심 축으로 안착하는 과정"이라는 본질을 이해한다면, 생성 모델을 해석하는 눈이 한층 더 넓어질 것입니다.
+    </div>
 
 </body>
 </html>
