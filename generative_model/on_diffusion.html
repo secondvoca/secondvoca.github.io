@@ -5,29 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>디퓨전 모델(Diffusion Models)의 수학적 본질과 매니폴드 형성 원리</title>
     
-    <!-- 부트스트랩 CSS CDN -->
-    <link rel="stylesheet" href="https://jsdelivr.net">
+    <!-- 부트스트랩 CSS CDN (속도 최적화 빌드) -->
+    <link rel="stylesheet" href="https://cloudflare.com">
     
-    <!-- MathJax v3 완벽 호환 구성 설정 -->
-    <script>
-        window.MathJax = {
-            tex: {
+    <!-- MathJax v2 구성 설정 (싱글 달러, 더블 달러 완벽 지원) -->
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
                 displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true,
-                processEnvironments: true
+                processEscapes: true
             },
-            options: {
-                // 부트스트랩 요소 내부에서도 수식이 정상 파싱되도록 제한 해제
-                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-            },
-            chtml: {
-                displayAlign: 'center'
-            }
-        };
+            "HTML-CSS": { fonts: ["TeX"] }
+        });
     </script>
-    <!-- 가장 안정적인 MathJax 공식 빌드 로드 -->
-    <script id="MathJax-script" async src="https://jsdelivr.net"></script>
+    <!-- 제안해주신 초고속 cjsjs MathJax v2 라이브러리 로드 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
     
     <style>
         body {
