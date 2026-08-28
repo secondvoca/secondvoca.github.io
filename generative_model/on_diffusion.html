@@ -5,23 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>디퓨전 모델(Diffusion Models)의 수학적 본질과 매니폴드 형성 원리</title>
     
-    <!-- 부트스트랩 CSS -->
+    <!-- 부트스트랩 CSS CDN -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     
-    <!-- MathJax v3 구성 설정: 스크립트 로드 전에 반드시 먼저 선언되어야 합니다 -->
+    <!-- MathJax v3 완벽 호환 구성 설정 -->
     <script>
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
                 displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true
+                processEscapes: true,
+                processEnvironments: true
             },
             options: {
-                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+                // 부트스트랩 요소 내부에서도 수식이 정상 파싱되도록 제한 해제
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            },
+            chtml: {
+                displayAlign: 'center'
             }
         };
     </script>
-    <!-- 공식적이고 안전한 jsDelivr CDN을 통한 MathJax v3 최신 버전 로드 -->
+    <!-- 가장 안정적인 MathJax 공식 빌드 로드 -->
     <script id="MathJax-script" async src="https://jsdelivr.net"></script>
     
     <style>
@@ -56,9 +61,12 @@
         .answer-box {
             margin-bottom: 35px;
         }
-        .highlight {
-            font-weight: bold;
-            color: #d63384;
+        .highlight-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin: 15px 0;
+            font-weight: 500;
         }
         table {
             margin-top: 20px;
@@ -99,9 +107,11 @@
             <p>수식이 완전히 올바르게 작성되었기 때문입니다. <strong>가우시안 분포 표기법의 수학적 약속</strong> 때문입니다.</p>
             <ul>
                 <li>통계학에서 가우시안 분포 $\mathcal{N}(\mu, \sigma^2)$를 표기할 때 두 번째 자리에는 표준편차가 아닌 <strong>분산(Variance)</strong>을 적기로 약속되어 있습니다. 따라서 분포 자체를 명시하는 위 식에서는 분산인 $\beta_t I$를 그대로 적는 것이 맞습니다.</li>
-                <li>다만, 이 분포에서 실제로 샘플링을 수행하는 코드(Reparameterization Trick)로 변환할 때는 노이즈 $\epsilon$에 표준편차인 <strong>$\sqrt{\beta_t}$</strong>를 곱해 주게 됩니다: <br> 
-                <span class="highlight">$$x_t = \sqrt{1 - \beta_t}x_{t-1} + \sqrt{\beta_t}\epsilon$$</span></li>
+                <li>다만, 이 분포에서 실제로 샘플링을 수행하는 코드(Reparameterization Trick)로 변환할 때는 노이즈 $\epsilon$에 표준편차인 <strong>$\sqrt{\beta_t}$</strong>를 곱해 주게 됩니다.</li>
             </ul>
+            <div class="highlight-box text-center">
+                실제 샘플링 식: $$x_t = \sqrt{1 - \beta_t}x_{t-1} + \sqrt{\beta_t}\epsilon$$
+            </div>
         </div>
 
         <!-- Q3 -->
@@ -123,7 +133,11 @@
         <div class="answer-box">
             <p>데이터 전체의 <strong>총 분산(Variance)을 시작부터 끝까지 항상 '1'로 일정하게 유지(Variance-Preserving)하기 위해서</strong>입니다.</p>
             <ul>
-                <li>입력 데이터 $x_0$의 분산을 1로 전처리했다고 가정했을 때, 앞서 배운 분산의 선형 결합 공식을 대입하면 $Var(x_1) = (\sqrt{1-\beta_1})^2 Var(x_0) + (\sqrt{\beta_1})^2 Var(\epsilon) = (1-\beta_1)\cdot 1 + \beta_1\cdot 1 = 1$이 됩니다. 즉, 몇 단계를 거쳐도 데이터의 전체 스케일은 항상 1로 고정됩니다.</li>
+                <li>입력 데이터 $x_0$의 분산을 1로 전처리했다고 가정했을 때, 앞서 배운 분산의 선형 결합 공식을 대입하면 다음과 같이 총 분산이 보존됩니다:
+                    <div class="my-2 text-center fw-bold">
+                        $Var(x_1) = (\sqrt{1-\beta_1})^2 Var(x_0) + (\sqrt{\beta_1})^2 Var(\epsilon) = (1-\beta_1)\cdot 1 + \beta_1\cdot 1 = 1$
+                    </div>
+                </li>
                 <li><strong>이유:</strong> 데이터의 외형적 크기(스케일)를 일정하게 묶어놓아야 역과정을 학습하는 딥러닝 신경망(U-Net)이 혼란을 겪지 않으며, 마지막 $x_T$ 단계에서 군더더기 없는 완벽한 표준 가우시안 노이즈를 코드로 쉽게 생성($\text{torch.randn}$)할 수 있기 때문입니다.</li>
             </ul>
         </div>
@@ -178,7 +192,7 @@
             <ol>
                 <li>원래의 목적식은 이론적 실제 평균 $\mu_t$와 모델의 예측 평균 $\mu_\theta$의 차이를 줄이는 $\| \mu_t - \mu_\theta \|^2$ 입니다.</li>
                 <li>여기에 여러 단계를 건너뛰는 공식인 $x_0 = \frac{1}{\sqrt{\bar{\alpha}_t}} \left( x_t - \sqrt{1 - \bar{\alpha}_t}\epsilon \right)$를 대입하여 식을 정리합니다.</li>
-                <li>그 결과 복잡한 계수와 변수들이 서로 상쇄되며 내부 알맹이인 <span class="highlight">$\mathbb{E} [\|\epsilon - \epsilon_\theta\|^2]$</span>만 남게 됩니다.</li>
+                <li>그 결과 복잡한 계수와 변수들이 서로 상쇄되며 내부 알맹이인 <strong>$\mathbb{E} [\|\epsilon - \epsilon_\theta\|^2]$</strong>만 남게 됩니다.</li>
             </ol>
             <p>즉, 한 단계 전으로 돌아가기 위해 깎아내야 할 미세한 조각을 찾는 행위는, <strong>현재 $x_t$에 스며있는 전체 누적 노이즈 $\epsilon$의 형태를 파악하는 것과 수학적으로 100% 완벽하게 동일한 작업</strong>입니다. 컴퓨터에게 평균 계산 규칙을 학습시키는 것보다 순수한 가우시안 노이즈 자체를 타겟으로 주는 것이 학습 효율과 안정성 면에서 훨씬 우수하기 때문에 이 식이 최종 표준 손실 함수가 되었습니다.</p>
         </div>
