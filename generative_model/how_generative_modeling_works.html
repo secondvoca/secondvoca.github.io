@@ -184,7 +184,7 @@
     <h1>생성 모델은 어떻게 데이터를 외우지 않고 다양체(Manifold)를 배우는가?</h1>
     
     <div class="intro-box">
-        <strong>들어가는 글:</strong> VAE, Diffusion, GAN 등의 생성 모델은 고차원 데이터셋을 정규분포(잠재 공간)로 매핑했다가 되돌리는 과정을 거칩니다. 그런데 왜 모델은 훈련 데이터를 그대로 외우지(Overfitting) 않고, '비슷하지만 새로운' 데이터를 만들어낼까요? 다양체 가설과 확률론의 관점에서 그 핵심 이유를 묻고 답합니다.
+        <strong>들어가는 글:</strong> VAE, Diffusion 등의 생성 모델은 고차원 데이터셋을 정규분포(잠재 공간)로 매핑했다가 되돌리는 과정을 거칩니다. 그런데 왜 모델은 훈련 데이터를 그대로 외우지(Overfitting) 않고, '비슷하지만 새로운' 데이터를 만들어낼까요? 다양체 가설과 확률론의 관점에서 그 핵심 이유를 묻고 답합니다.
     </div>
 
     <h3>Q1. 신경망이 훈련 데이터만 완벽하게 외워버리지 않고, 새로운 데이터를 '생성'해내는 수학적 원리는 무엇인가요?</h3>
@@ -202,7 +202,7 @@
         <p><strong>A2. 조각 선형 다양체(Piecewise Linear Manifold)의 형성 및 경사하강법(SGD)의 내재적 편향 덕분입니다.</strong></p>
         <ol>
             <li><strong>ReLU의 연속성:</strong> ReLU는 \(x=0\)에서 미분은 불가능하지만 끊어지지 않는 <strong>연속 함수</strong>입니다. 연속 함수의 합성 역시 연속 함수이므로, ReLU 네트워크가 만드는 공간은 부드러운 곡면은 아닐지라도, 수많은 평면 조각들이 촘촘하게 꺾여서 연결된 <strong>다면체 형태의 다양체</strong>를 형성합니다.</li>
-            <li><strong>오캄의 면도날 (Implicit Regularization):</strong> SGD로 신경망을 최적화할 때, 네트워크는 파라미터 공간에서 <strong>가장 부드럽고 곡률이 낮은(Low-curvature) 함수를 먼저 선택하는 강력한 내재적 편향</strong>을 가집니다. 데이터 점들을 급격하게 꺾어가며 억지로 외우는 복잡한 경로는 기울기 폭발을 일으키므로 SGD가 기하학적으로 배제합니다.</li>
+            <li><strong>핵심 원리:</strong> 생성 모델이 실제 데이터가 밀집한 저차원 구조의 확률 분포를 학습하고, 잠재 공간과 데이터 공간을 잇는 연속적인 매핑을 형성한다는 데 있습니다. 여기서 중요한 점은 매니폴드가 원래부터 따로 존재하는 물리적 실체라고 단정할 수는 없다는 것입니다. 대신 실제 데이터가 차지하는 영역이 대부분의 가능한 조합보다 훨씬 작으며, 모델은 훈련 데이터에 자주 나타나는 특징 조합을 중심으로 유효한 영역을 찾아갑니다.</li>
         </ol>
     </div>
 
@@ -335,20 +335,17 @@ plot_large_matrix(images_pca, "1. PCA Subspace")
 plot_large_matrix(images_linear, "2. Linear AE Subspace")
 plot_large_matrix(images_nonlinear, "3. Non-linear AE Manifold")</code></pre>
 
-<h4 style="margin-top: 30px; margin-bottom: 15px; color: #444; font-size: 1.1rem; font-weight: bold;">📊 모델별 잠재 공간 격자 탐색 결과 (실행 결과)</h4>
+<h4 style="margin-top: 30px; margin-bottom: 15px; color: #AAA; font-size: 1.1rem; font-weight: bold; text-align: center;">실행 결과</h4>
 
 <div class="result-images-container">
     <div class="image-card">
         <img src="../assets/img/result_pca.png" alt="PCA 결과">
-        <p>1. PCA Subspace</p>
     </div>
     <div class="image-card">
         <img src="../assets/img/result_linear_ae.png" alt="Linear AE 결과">
-        <p>2. Linear AE Subspace</p>
     </div>
     <div class="image-card">
         <img src="../assets/img/result_nonlinear_ae.png" alt="Non-linear AE 결과">
-        <p>3. Non-linear AE Manifold</p>
     </div>
 </div>
 
